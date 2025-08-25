@@ -519,12 +519,17 @@ async def nvidia_openai_complete(
     prompt, system_prompt=None, history_messages=[], keyword_extraction=False, **kwargs
 ) -> str:
     keyword_extraction = kwargs.pop("keyword_extraction", None)
+    
+    # Get model and URL from environment variables with fallbacks
+    model_name = os.environ.get("LLM_MODEL_NAME", "nvidia/llama-3.1-nemotron-70b-instruct")
+    base_url = os.environ.get("LLM_URL", "https://integrate.api.nvidia.com/v1")
+    
     result = await openai_complete_if_cache(
-        "nvidia/llama-3.1-nemotron-70b-instruct",  
+        model_name,  
         prompt,
         system_prompt=system_prompt,
         history_messages=history_messages,
-        base_url="https://integrate.api.nvidia.com/v1",
+        base_url=base_url,
         **kwargs,
     )
     if keyword_extraction:  # TODO: use JSON API
@@ -821,13 +826,18 @@ async def jina_embedding(
 )
 async def nvidia_openai_embedding(
     texts: list[str],
-    model: str = "nvidia/llama-3.2-nv-embedqa-1b-v1",
-    base_url: str = "https://integrate.api.nvidia.com/v1",
+    model: str = None,
+    base_url: str = None,
     api_key: str = None,
     input_type: str = "passage",  
     trunc: str = "NONE",  
     encode: str = "float",  
 ) -> np.ndarray:
+    # Get model and URL from environment variables with fallbacks
+    if model is None:
+        model = os.environ.get("EMBEDDING_MODEL_NAME", "nvidia/llama-3.2-nv-embedqa-1b-v1")
+    if base_url is None:
+        base_url = os.environ.get("EMBEDDING_URL", "https://integrate.api.nvidia.com/v1")
     if api_key:
         os.environ["OPENAI_API_KEY"] = api_key
 
