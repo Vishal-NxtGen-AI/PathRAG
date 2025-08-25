@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from PathRAG import PathRAG, QueryParam
-from PathRAG.llm import nvidia_openai_complete
+from PathRAG.llm import nvidia_openai_complete, nvidia_openai_embedding
 
 # Load environment variables from .env file
 load_dotenv()
@@ -17,26 +17,14 @@ if not os.path.exists(WORKING_DIR):
 
 rag = PathRAG(
     working_dir=WORKING_DIR,
-    llm_model_func=nvidia_openai_complete,  
+    llm_model_func=nvidia_openai_complete,
+    embedding_func=nvidia_openai_embedding,
 )
 
-data_file=""
-question=""
+data_file="walden.txt"
+question="What happened when Thoreau's cabin caught fire?"
 with open(data_file) as f:
     rag.insert(f.read())
 
 print(rag.query(question, param=QueryParam(mode="hybrid")))
-
-
-
-
-
-
-
-
-
-
-
-
-
 
