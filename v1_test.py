@@ -6,7 +6,7 @@ from PathRAG.llm import nvidia_openai_complete, nvidia_openai_embedding
 # Load environment variables from .env file
 load_dotenv()
 
-WORKING_DIR = "/Users/1500/Desktop/PathRAG"
+WORKING_DIR = "/Users/1500/Desktop/PathRAG/pathrag_cache"
 
 api_key=""
 os.environ["OPENAI_API_KEY"] = api_key
